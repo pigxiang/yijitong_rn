@@ -18,7 +18,7 @@ export default class UI extends Component {
             iccid: '',
             console: '一起呵呵7笑',
         };
-        this._console = this._console.bind(this)
+        // this._console = this._console.bind(this)
     }
 
     componentDidMount() {
