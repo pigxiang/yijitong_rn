@@ -2,7 +2,7 @@
  * Created by TianXX on 2017/4/26.
  */
 
-
+import GEO from "./geo.js";
 
 const address = "http://www.yijitongoa.com:9090";
 
@@ -83,8 +83,7 @@ export let realLogin = context => {
 
 export let attendance = context => {
     context.console('签到...');
-    const positionData = "39.962536,116.229567";
-    const positionDescription = "中国北京市海淀区杏石口路99号";
+    const [positionData, positionDescription] = GEO.getGeo(context['geo']);
     const url = address + '/yjtoa/s/signins/attendances';
     const fileds = {
         descColor: 0,

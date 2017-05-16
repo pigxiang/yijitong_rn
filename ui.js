@@ -3,8 +3,9 @@
  */
 
 import React, {Component} from "react";
-import {AsyncStorage, Button, StatusBar, StyleSheet, Text, TextInput, ToolbarAndroid, View} from "react-native";
+import {AsyncStorage, Button, Picker, StatusBar, StyleSheet, Text, TextInput, ToolbarAndroid, View} from "react-native";
 import {attendance, clientLogin, realLogin, spawn} from "./yjt.js";
+import GEO from "./geo.js";
 
 import native from "./nativeModules";
 
@@ -16,6 +17,7 @@ export default class UI extends Component {
             phone: '',
             password: '',
             iccid: '',
+            geo: '西山赢府',
             console: '一起呵呵7笑',
         };
         // this._console = this._console.bind(this)
@@ -80,6 +82,16 @@ export default class UI extends Component {
                     />
                     <Button style={styles.getIccid} title="GET" onPress={this._getIccid}/>
                 </View>
+                <View style={styles.pair}>
+                    <Text style={styles.text}>GEO: </Text>
+                    <Picker
+                        mode={'dropdown'}
+                        style={{width: 200}}
+                        selectedValue={this.state.geo}
+                        onValueChange={(value) => this.setState({geo: value})}>
+                        {this._geo()}
+                    </Picker>
+                </View>
                 <Text style={styles.console} ref="console">{this.state.console}</Text>
                 <Button
                     style={styles.go}
@@ -92,8 +104,16 @@ export default class UI extends Component {
         )
     }
 
+    _geo = (name) => {
+        let items = [];
+        for (let g in GEO.data) {
+            items.push(<Picker.Item key={g} label={GEO.data[g][0]} value={g}/>)
+        }
+        return items
+    }
+
     _go = (event) => {
-        spawn(this.state.phone, this.state.password, this.state.iccid, 1, this._console)
+        spawn(this.state.phone, this.state.password, this.state.iccid, this.state.geo, this._console)
             .then(clientLogin)
             .then(realLogin)
             .then(attendance)
